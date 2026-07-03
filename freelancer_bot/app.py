@@ -21,6 +21,12 @@ from .storage import LeadRecord, Storage
 
 LOGGER = logging.getLogger("freelancer_bot")
 
+CLIENT_RETRY_OPTIONS = {
+    "connection_retries": 10,
+    "request_retries": 5,
+    "retry_delay": 3,
+}
+
 
 class LeadBot:
     def __init__(self, config: RuntimeConfig):
@@ -35,11 +41,13 @@ class LeadBot:
             user_session,
             config.api_id,
             config.api_hash,
+            **CLIENT_RETRY_OPTIONS,
         )
         self.bot_client = TelegramClient(
             str(config.bot_session_path),
             config.api_id,
             config.api_hash,
+            **CLIENT_RETRY_OPTIONS,
         )
 
     async def run(self) -> None:
@@ -226,7 +234,7 @@ async def run_app() -> None:
 
 async def generate_user_session() -> None:
     config = RuntimeConfig.from_env()
-    async with TelegramClient(StringSession(), config.api_id, config.api_hash) as client:
+    async with TelegramClient(StringSession(), config.api_id, config.api_hash, **CLIENT_RETRY_OPTIONS) as client:
         print(client.session.save())
 
 
