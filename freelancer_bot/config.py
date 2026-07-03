@@ -39,7 +39,7 @@ class RuntimeConfig:
 
     @classmethod
     def from_env(cls) -> "RuntimeConfig":
-        load_dotenv()
+        load_dotenv(encoding="utf-8-sig")
 
         api_id_raw = _first_env("TELEGRAM_API_ID", "API_ID")
         api_hash = _first_env("TELEGRAM_API_HASH", "API_HASH")
