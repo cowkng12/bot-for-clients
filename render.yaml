@@ -1,0 +1,32 @@
+services:
+  - type: worker
+    name: telegram-freelance-lead-bot
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m freelancer_bot
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: DATABASE_PATH
+        value: /var/data/leads.sqlite3
+      - key: LOG_LEVEL
+        value: INFO
+      - key: SEND_CATCH_UP
+        value: "true"
+      - key: CATCH_UP_LIMIT
+        value: "25"
+      - key: TELEGRAM_API_ID
+        sync: false
+      - key: TELEGRAM_API_HASH
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_USER_SESSION_STRING
+        sync: false
+      - key: TELEGRAM_TARGET_CHAT_ID
+        sync: false
+    disk:
+      name: bot-data
+      mountPath: /var/data
+      sizeGB: 1
